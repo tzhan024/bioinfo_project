@@ -1,0 +1,238 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class GeneticAlgorithm {
+
+	Population population = new Population();
+	int[] top10;
+	int[] least10;
+	int generationCount = 0;
+
+	public static void main(String[] args) {
+		GeneticAlgorithm ga = new GeneticAlgorithm();
+		Individual bestIndividual = null;
+		int bestFittness = 0;
+
+		//data was taken from: http://lbgi.fr/wscoperr?Balibase&FileMoi&tfas&BB11001
+		String[] BB11001 =
+				{
+						"GKGDPKKPRGKMSSYAFFVQTSREEHKKKHPDASVNFSEFSKKCSERWKTMSAKEKGKFEDMAKADKARYEREMKTYIPPKGE",
+						"MQDRVKRPMNAFIVWSRDQRRKMALENPRMRNSEISKQLGYQWKMLTEAEKWPFFQEAQKLQAMHREKYPNYKYRPRRKAKMLPK",
+						"MKKLKKHPDFPKKPLTPYFRFFMEKRAKYAKLHPEMSNLDLTKILSKKYKELPEKKKMKYIQDFQREKQEFERNLARFREDHPDLIQNAKK",
+						"MHIKKPLNAFMLYMKEMRANVVAESTLKESAAINQILGRRWHALSREEQAKYYELARKERQLHMQLYPGWSARDNYGKKKKRKREK"
+				};
+		String[] BB11003 =
+				{
+						"SISDTVKRAREAFNSGKTRSLQFRIQQLEALQRMINENLKSISGALASDL" +
+								"GKNEWTSYYEEVAHVLEELDTTIKELPDWAEDEPVAKTRQTQQDDLYIHS" +
+								"EPLGVVLVIGAWNYPFNLTIQPMVGAVAAGNAVILKPSEVSGHMADLLAT" +
+								"LIPQYMDQNLYLVVKGGVPETTELLKERFDHIMYTGSTAVGKIVMAAAAK" +
+								"HLTPVTLELGGKSPCYVDKDCDLDVACRRIAWGKFMNSGQTCVAPDYILC" +
+								"DPSIQNQIVEKLKKSLKDFYGEDAKQSRDYGRIINDRHFQRVKGLIDNQK" +
+								"VAHGGTWDQSSRYIAPTILVDVDPQSPVMQEEIFGPVMPIVCVRSLEEAI" +
+								"QFINQREKPLALYVFSNNEKVIKKMIAETSSGGVTANDVIVHITVPTLPF" +
+								"GGVGNSGMGAYHGKKSFETFSHRRSCLVKSLLNEEAHKARYPPSPA",
+								"MTVEPFRNEPIETFQTEEARRAMREALRRVREEFGRHYPLYIGGEWVDTK" +
+								"ERMVSLNPSAPSEVVGTTAKAGKAEAEAALEAAWKAFKTWKDWPQEDRSR" +
+								"LLLKAAALMRRRKRELEATLVYEVGKNWVEASADVAEAIDFIEYYARAAL" +
+								"RYRYPAVEVVPYPGEDNESFYVPLGAGVVIAPWNFPVAIFTGMIVGPVAV" +
+								"GNTVIAKPAEDAVVVGAKVFEIFHEAGFPPGVVNFLPGVGEEVGAYLVEH" +
+								"PRIRFINFTGSLEVGLKIYEAAGRLAPGQTWFKRAYVETGGKNAIIVDET" +
+								"ADFDLAAEGVVVSAYGFQGQKCSAASRLILTQGAYEPVLERVLKRAERLS" +
+								"VGPAEENPDLGPVVSAEQERKVLSYIEIGKNEGQLVLGGKRLEGEGYFIA" +
+								"PTVFTEVPPKARIAQEEIFGPVLSVIRVKDFAEALEVANDTPYGLTGGVY" +
+								"SRKREHLEWARREFHVGNLYFNRKITGALVGVQPFGGFKLSGTNAKTGAL" +
+								"DYLRLFLEMKAVAERF",
+
+						"TDNVFYATNAFTGEALPLAFPVHTEVEVNQAATAAAKVARDFRRLNNSKR" +
+								"ASLLRTIASELEARSDDIIARAHLETALPEVRLTGEIARTANQLRLFADV" +
+								"VNSGSYHQAILDTPNPTRAPLPKPDIRRQQIALGPVAVFGASNFPLAFSA" +
+								"AGGDTASALAAGCPVIVKGHTAHPGTSQIVAECIEQALKQEQLPQAIFTL" +
+								"LQGNQRALGQALVSHPEIKAVGFTGSVGGGRALFNLAHERPEPIPFYGEL" +
+								"GAINPTFIFPSAMRAKADLADQFVASMTMGCGQFCTKPGVVFALNTPETQ" +
+								"AFIETAQSLIRQQSPSTLLTPGIRDSYQSQVVSRGSDDGIDVTFSQAESP" +
+								"CVASALFVTSSENWRKHPAWEEEIFGPQSLIVVCENVADMLSLSEMLAGS" +
+								"LTATIHATEEDYPQVSQLIPRLEEIAGRLVFNGWPTGVEVGYAMVHGGPY" +
+								"PASTHSASTSVGAEAIHRWLRPVAYQALPESLLPDSLKAENPLEIARAVD" +
+								"GKAA",
+
+						"DELLEKAKKVREAWDVLRNATTREKNKAIKKIAEKLDERRKEILEANRID" +
+								"VEKARERGVKESLVDRLALNDKRIDEXIKACETVIGLKDPVGEVIDSWVR" +
+								"EDGLRIARVRVPIGPIGIIYESRPNVTVETTILALKSGNTILLRGGSDAL" +
+								"NSNKAIVSAIREALKETEIPESSVEFIENTDRSLVLEXIRLREYLSLVIP" +
+								"RGGYGLISFVRDNATVPVLETGVGNCHIFVDESADLKKAVPVIINAKTQR" +
+								"PGTCNAAEKLLVHEKIAKEFLPVIVEELRKHGVEVRGCEKTREIVPDVVP" +
+								"ATEDDWPTEYLDLIIAIKVVKNVDEAIEHIKKYSTGHSESILTENYSNAK" +
+								"KFVSEIDAAAVYVNASTRFTDGGQFGFGAEIGISTQRFHARGPVGLRELT" +
+								"TYKFVVLGEYHVRE",
+				};
+		String[] BB11008 =
+				{
+						"LQDAEWYWGDISREEVNEKLRDTADGTFLVRDASTKMHGDYTLTLRKGGN" +
+								"NKLIKIFHRDGKYGFSDPLTFNSVVELINHYRNESLAQYNPKLDVKLLYP" +
+								"VSKY",
+
+						"GSPASGTSLSAAIHRTQLWFHGRISREESQRLIGQQGLVDGLFLVRESQR" +
+								"NPQGFVLSLCHLQKVKHYLILPSEEEGRLYFSMDDGQTRFTDLLQLVEFH" +
+								"QLNRGILPCLLRHCCTRVAL",
+
+						"SSPQPILDTIYKLLSEQEQTLVQMIHEQSLLLNRLPPTLDENSLAPLKSL" +
+								"SQKQITLSGQMNTEMSALDATKKGMILEPTDLAKLFALKQDLQIQFKQLS" +
+								"LLHNEIQSILNPQHSAPKPNVALVLKSQPFPVVISKGKQLGENQLVVLVL" +
+								"TGARSNFHINGPVKATMICDSHPPTTPLEMDSQPIYPATLTAHFPLKFLA" +
+								"GTRKCSVNLKFGVNIRDLDNVTTTVESDASNPFVVITNECQWEGSAGVLL" +
+								"KKDAFDGQLEITWAQFINTLQRHFLIATKQDPVRPKRPLSSYDLKYIQTH" +
+								"FFGNRSIIHQQDFDKFWVWFGKSMQTLRYQRHISTLWQEGIIYGYMGRQE" +
+								"VNDALQNQDPGTFIIRFSERNPGQFGIAYIGVEMPARIKHYLVQPNDTAA" +
+								"AKKTFPDFLSEHSQFVNLLQWTKDTNGAPRFLKLHKDTALGSFAPKRTAP" +
+								"VPVGGX",
+
+						"LDKQKELDSKVRNVKDKVMCIEHEIKSLEDLQDEYDFKCKTLQNREHLLL" +
+								"KKMYLMLDNKRKEVVHKIIELLNVTELTQNALINDELVEWKRRQQSACIG" +
+								"GPPNACLDQLQNWFTIVAESLQQVRQQLKKLEELEQKYTYEHDPITKNKQ" +
+								"VLWDRTFSLFQQLIQSSFVVERQPCMPTHPQRPLVLKTGVQFTVKLRLLV" +
+								"KLQELNYNLKVKVLFDKDVNERNTVKGFRKFNILGTHTKVMNMEESTNGS" +
+								"LAAEFRHLQLKEQKNAGTRTNEGPLIVTEELHSLSFETQLCQPGLVIDLE" +
+								"TTSLPVVVISNVSQLPSGWASILWYNMLVAEPRNLSFFLTPPCARWAQLS" +
+								"EVLSWQFSSVTKRGLNVDQLNMLGEKLLGPNASPDGLIPWTRFCKENIND" +
+								"KNFPFWLWIESILELIKKHLLPLWNDGCIMGFISKERERALLKDQQPGTF" +
+								"LLRFSESSREGAITFTWVERSQNGGEPDFHAVEPYTKKELSAVTFPDIIR" +
+								"NYKVMAAENIPENPLKYLYPNIDKDHAFGKYYSRGXIKTE",
+				};
+
+		//Initialize population
+		System.out.println("Please select dataset: ");
+		System.out.println("1 -> BB11001");
+		System.out.println("2 -> BB11003");
+		System.out.println("3 -> BB11008");
+		Scanner in = new Scanner(System.in);
+		String choose = in.nextLine();
+		if(choose.equals("1") )
+			ga.population.initializePopulation(200, BB11001);
+		else if(choose.equals("2"))
+			ga.population.initializePopulation(200, BB11003);
+		else if(choose.equals("3"))
+			ga.population.initializePopulation(200, BB11008);
+		else
+		{
+			System.out.println("invalid input");
+			return;
+		}
+
+		//Calculate fitness of each individual
+		ga.population.calculateFitness();
+
+		bestIndividual = ga.population.getFittest();
+		bestFittness = ga.population.highestFittness;
+		System.out.println("Generation: " + ga.generationCount + " Fittest: " + bestFittness);
+
+		//While population gets an individual with maximum fitness
+		int count = 0;
+		while (count < 500) {
+			ga.generationCount++;
+
+			//Do selection
+			ga.selection();
+
+			//Do crossover
+			ga.crossover();
+
+			//Do mutation under a random probability
+			if (Math.random() < 0.05)
+			{
+				ga.mutation();
+			}
+
+			//Calculate new fitness value
+			ga.population.calculateFitness();
+
+
+			if(bestFittness < ga.population.highestFittness)
+			{
+				bestIndividual = ga.population.getFittest();
+				bestFittness = ga.population.highestFittness;
+
+			}
+			else
+				count++;
+
+			System.out.println("Generation: " + ga.generationCount + " Fittest: " + bestFittness);
+		}
+
+		System.out.println("\nSolution found in generation " + ga.generationCount);
+		System.out.println("\nHere are the sequences: ");
+		for(int i = 0; i < bestIndividual.sequence.length; i++)
+		{
+			System.out.println(bestIndividual.sequence[i]);
+		}
+		System.out.println("\nThe best fitness for genetic algorithm is: "+ga.population.getFittest().fitness);
+		System.out.println("The fitness for the comparing algorithm is: (MISSING)");
+		System.out.println("The accuracy is: (MISSING)");
+	}
+
+	//Selection
+	void selection() {
+
+		//Select the most fittest individual
+
+		top10 = population.getTop10();
+		least10 = population.getLeast10();
+	}
+
+	//Crossover
+	void crossover() {
+		Random rn = new Random();
+
+		//Select a random crossover point
+		int crossOverPoint = rn.nextInt(population.individuals[0].sequenceLength);
+
+
+		//Swap values among parents
+		for(int i = 0; i < top10.length; i++)
+		{
+			for (int j = 0; j < population.individuals[top10[i]].sequence.length; j++) {
+//				System.out.println(crossOverPoint + " " + population.individuals[0].sequenceLength);
+//				System.out.println("before crossover " + fittest.sequence[i]);
+//				System.out.println("before crossover " + secondFittest.sequence[i]);
+
+				String fittest1 = population.individuals[top10[i]].sequence[j].substring(0, crossOverPoint);
+				String fittest2 = population.individuals[top10[(i + 1) % top10.length]].sequence[j].substring(crossOverPoint);
+				String secondFittest1 = population.individuals[top10[i]].sequence[j].substring(0, crossOverPoint);
+				String secondFittest2 = population.individuals[top10[(i + 1) % top10.length]].sequence[j].substring(crossOverPoint);
+
+				population.individuals[least10[i]].sequence[j] = fittest1 + secondFittest2;
+				population.individuals[least10[(i + 1) % least10.length]].sequence[j] = secondFittest1 + fittest2;
+
+//				System.out.println("after  crossover " + fittest.sequence[i]);
+//				System.out.println("after  crossover " + secondFittest.sequence[i]);
+			}
+		}
+
+
+	}
+
+	//Mutation
+	void mutation()
+	{
+		Random rn = new Random();
+		//Select a random mutation point
+		int mutationPoint = rn.nextInt(population.individuals[0].sequenceLength);
+		int individualIndex = rn.nextInt(population.individuals.length);
+		int proteinIndex = rn.nextInt(population.individuals[0].sequence.length);
+
+		if(population.individuals[individualIndex].sequence[proteinIndex].charAt(mutationPoint) != '_')
+		{
+			population.individuals[individualIndex].sequence[proteinIndex] =
+					population.individuals[individualIndex].sequence[proteinIndex].substring(0, mutationPoint) +
+							"_" +
+							population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint + 1);
+		}
+		else
+		{
+			population.individuals[individualIndex].sequence[proteinIndex] =
+					population.individuals[individualIndex].sequence[proteinIndex].substring(0, mutationPoint) +
+							population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint + 1) +
+							"_";
+		}
+	}
+}
