@@ -19,7 +19,7 @@ public class Individual {
         {
             for(int j = 0; j < sequence.length; j++)
             {
-                if((sequence[j].charAt(i) == sequence[(j + 1) % sequence.length].charAt(i)) && (sequence[j].charAt(i)!= '_')){
+                if((sequence[j].charAt(i) == sequence[(j + 1) % sequence.length].charAt(i)) && (sequence[j].charAt(i)!= '_' || sequence[j].charAt(i)!= '.')){
                     fitness++;
                 }
             }
