@@ -145,11 +145,50 @@ public class GeneticAlgorithm {
 		Scanner in = new Scanner(System.in);
 		String choose = in.nextLine();
 		if(choose.equals("1") )
-			ga.population.initializePopulation(200, BB11001);
+		{
+			Individual callfunc = new Individual(BB11001);
+			String[] firstalign = new String[BB11001.length];
+			for(int i = 0; i < BB11001.length-1; i++)
+	        {
+				firstalign[i]=callfunc.algin(BB11001[i],BB11001[(i+1)])[0];
+				if(i==BB11001.length-2)
+				{
+					firstalign[i+1]=callfunc.algin(BB11001[i],BB11001[(i+1)%BB11001.length])[1];
+				}
+	        }
+			ga.population.initializePopulation(200, firstalign);
+		}
+			
 		else if(choose.equals("2"))
+		{
+			Individual callfunc = new Individual(BB11013);
+			String[] firstalign = new String[BB11013.length];
+			for(int i = 0; i < BB11013.length-1; i++)
+	        {
+				firstalign[i]=callfunc.algin(BB11013[i],BB11013[(i+1)])[0];
+				if(i==BB11013.length-2)
+				{
+					firstalign[i+1]=callfunc.algin(BB11013[i],BB11013[(i+1)%BB11013.length])[1];
+				}
+	        }
 			ga.population.initializePopulation(200, BB11013);
+		}
+			//ga.population.initializePopulation(200, BB11013);
 		else if(choose.equals("3"))
+		{
+			Individual callfunc = new Individual(BB11008);
+			String[] firstalign = new String[BB11008.length];
+			for(int i = 0; i < BB11008.length-1; i++)
+	        {
+				firstalign[i]=callfunc.algin(BB11008[i],BB11008[(i+1)])[0];
+				if(i==BB11008.length-2)
+				{
+					firstalign[i+1]=callfunc.algin(BB11008[i],BB11013[(i+1)%BB11008.length])[1];
+				}
+	        }
 			ga.population.initializePopulation(200, BB11008);
+		}
+			//ga.population.initializePopulation(200, BB11008);
 		else
 		{
 			System.out.println("invalid input");
