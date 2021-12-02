@@ -63,7 +63,26 @@ public class GeneticAlgorithm {
 								"LLRFSESSREGAITFTWVERSQNGGEPDFHAVEPYTKKELSAVTFPDIIR" +
 								"NYKVMAAENIPENPLKYLYPNIDKDHAFGKYYSRGXIKTE",
 				};
+		String[] data3 =
+			{
+					"MSLSDKDKAAVKALWAKISPKADDIGAEALGRMLTVYPQTKTYFAHWDDLSPGSGPVKKH"+
+					"GKVIMGAVADAVSKIDDLVGGLASLSELHASKLRVDPANFKILAHNVIVVIGMLFPGDFP"+
+					"PEVHMSVDKFFQNLALALSEKYR",
+					
+					"MVLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHG"+
+				    "KKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP"+
+				    "AVHASLDKFLASVSTVLTSKYR",
+				    
+				    "MVLSGEDKSNIKAAWGKIGGHGAEYGAEALERMFASFPTTKTYFPHFDVSHGSAQVKGHG"+
+				    "KKVADALASAAGHLDDLPGALSALSDLHAHKLRVDPVNFKLLSHCLLVTLASHHPADFTP"+
+				    "AVHASLDKFLASVSTVLTSKYR",
+				     
+				     "MSLTRTERTIILSLWSKISTQADVIGTETLERLFSCYPQAKTYFPHFDLHSGSAQLRAHG"+
+				     "SKVVAAVGDAVKSIDNVTSALSKLSELHAYVLRVDPVNFKFLSHCLLVTLASHFPADFTA"+
+				     "DAHAAWDKFLSIVSGVLTEKYR"
+					
 
+			};
 
 		String[] BB11001Result =
 				{
@@ -136,6 +155,25 @@ public class GeneticAlgorithm {
 								"  G.......XIKTE......",
 
 				};
+		String[] data3res =
+			{
+					"MSLSDKDKAAVKALWAKISPKADDIGAEALGRMLTVYPQTKTYFAHWDDLSPGSGPVKKH"+
+					"GKVIMGAVADAVSKIDDLVGGLASLSELHASKLRVDPANFKILAHNVIVVIGMLFPGDFP"+
+					"PEVHMSVDKFFQNLALALSEKYR",
+					
+					"MVLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFD-LSHGSAQVKGH"+
+				    "GKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFT"+
+				    "PAVHASLDKFLASVSTVLTSKYR",
+				    
+				    "MVLSGEDKSNIKAAWGKIGGHGAEYGAEALERMFASFPTTKTYFPHFD-VSHGSAQVKGH"+
+				    "GKKVADALASAAGHLDDLPGALSALSDLHAHKLRVDPVNFKLLSHCLLVTLASHHPADFT"+
+				    "PAVHASLDKFLASVSTVLTSKYR",
+				     
+				     "MSLTRTERTIILSLWSKISTQADVIGTETLERLFSCYPQAKTYFPHFD-LHSGSAQLRAH"+
+				     "GSKVVAAVGDAVKSIDNVTSALSKLSELHAYVLRVDPVNFKFLSHCLLVTLASHFPADFT"+
+				     "ADAHAAWDKFLSIVSGVLTEKYR"
+					
+			};
 
 		//Initialize population
 		System.out.println("Please select dataset: ");
@@ -144,12 +182,64 @@ public class GeneticAlgorithm {
 		System.out.println("3 -> BB11008");
 		Scanner in = new Scanner(System.in);
 		String choose = in.nextLine();
-		if(choose.equals("1") )
-			ga.population.initializePopulation(200, BB11001);
-		else if(choose.equals("2"))
-			ga.population.initializePopulation(200, BB11013);
+		
+		
+		Individual callfunc = new Individual(BB11001);
+		if(choose.equals("1") ) 
+		{
+			
+			String[] firstalign = new String[BB11001.length];
+			for(int i = 0; i < BB11001.length-1; i++)
+	        {
+				firstalign[i]=callfunc.algin(BB11001[i],BB11001[(i+1)])[0];
+				if(i==BB11001.length-2)
+				{
+					firstalign[i+1]=callfunc.algin(BB11001[i],BB11001[(i+1)%BB11001.length])[1];
+				}
+	        }
+			ga.population.initializePopulation(200, firstalign); //can switch back to orgin sequence
+		}	
+		else if(choose.equals("2")) 
+		{
+			String[] firstalign = new String[BB11013.length];
+			for(int i = 0; i < BB11013.length-1; i++)
+	        {
+				firstalign[i]=callfunc.algin(BB11013[i],BB11013[(i+1)])[0];
+				if(i==BB11013.length-2)
+				{
+					firstalign[i+1]=callfunc.algin(BB11013[i],BB11013[(i+1)%BB11013.length])[1];
+				}
+	        }
+			ga.population.initializePopulation(200, firstalign); //can switch back to orgin sequence
+		}
+			//ga.population.initializePopulation(200, BB11013);
 		else if(choose.equals("3"))
-			ga.population.initializePopulation(200, BB11008);
+		{
+			String[] firstalign = new String[BB11008.length];
+			for(int i = 0; i < BB11008.length-1; i++)
+	        {
+				firstalign[i]=callfunc.algin(BB11008[i],BB11008[(i+1)])[0];
+				if(i==BB11008.length-2)
+				{
+					firstalign[i+1]=callfunc.algin(BB11008[i],BB11008[(i+1)%BB11008.length])[1];
+				}
+	        }
+			ga.population.initializePopulation(200, firstalign); //can switch back to orgin sequence
+		}
+			//ga.population.initializePopulation(200, BB11008);
+		else if(choose.equals("4")) 
+		{
+			String[] firstalign = new String[data3.length];
+			for(int i = 0; i < data3.length-1; i++)
+	        {
+				firstalign[i]=callfunc.algin(data3[i],data3[(i+1)])[0];
+				if(i==data3.length-2)
+				{
+					firstalign[i+1]=callfunc.algin(data3[i],data3[(i+1)%data3.length])[1];
+				}
+	        }
+			ga.population.initializePopulation(200, data3); //can switch back to orgin sequence
+		}
 		else
 		{
 			System.out.println("invalid input");
@@ -214,6 +304,10 @@ public class GeneticAlgorithm {
 		{
 			result = new Individual(BB11013Result);
 		}
+		else if(choose.equals("4"))
+		{
+			result = new Individual(data3res);
+		}
 		else
 		{
 			result = new Individual(BB11008Result);
@@ -237,13 +331,11 @@ public class GeneticAlgorithm {
 	void crossover() {
 		Random rn = new Random();
 
-		//Select a random crossover point
-		int crossOverPoint = rn.nextInt(population.individuals[0].sequenceLength);
-
-
 		//Swap values among parents
 		for(int i = 0; i < top10.length; i++)
 		{
+			//Select a random crossover point
+			int crossOverPoint = rn.nextInt(population.individuals[0].sequenceLength);
 			for (int j = 0; j < population.individuals[top10[i]].sequence.length; j++) {
 //				System.out.println(crossOverPoint + " " + population.individuals[0].sequenceLength);
 //				System.out.println("before crossover " + fittest.sequence[i]);
@@ -278,7 +370,7 @@ public class GeneticAlgorithm {
 		{
 			population.individuals[individualIndex].sequence[proteinIndex] =
 					population.individuals[individualIndex].sequence[proteinIndex].substring(0, mutationPoint) +
-							"_" +
+							population.individuals[individualIndex].sequence[(proteinIndex + 1) % population.individuals[individualIndex].sequence.length].substring(mutationPoint, mutationPoint + 1) +
 							population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint + 1);
 		}
 		else
