@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -8,7 +10,7 @@ public class GeneticAlgorithm {
 	int[] least10;
 	int generationCount = 0;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException{
 		GeneticAlgorithm ga = new GeneticAlgorithm();
 		Individual bestIndividual = null;
 		int bestFittness = 0;
@@ -176,7 +178,7 @@ public class GeneticAlgorithm {
 			};
 
 		//Initialize population
-		System.out.println("Please select dataset: ");
+		System.out.println("Please select dataset, or enter a custom dataset to start eg. (BB11001): ");
 		System.out.println("1 -> BB11001");
 		System.out.println("2 -> BB11003");
 		System.out.println("3 -> BB11008");
@@ -184,10 +186,10 @@ public class GeneticAlgorithm {
 		String choose = in.nextLine();
 		
 		
-		Individual callfunc = new Individual(BB11001);
+//		Individual callfunc = new Individual(BB11001);
 		if(choose.equals("1") ) 
 		{
-			
+			Individual callfunc = new Individual(BB11001);
 			String[] firstalign = new String[BB11001.length];
 			for(int i = 0; i < BB11001.length-1; i++)
 	        {
@@ -201,6 +203,7 @@ public class GeneticAlgorithm {
 		}	
 		else if(choose.equals("2")) 
 		{
+			Individual callfunc = new Individual(BB11013);
 			String[] firstalign = new String[BB11013.length];
 			for(int i = 0; i < BB11013.length-1; i++)
 	        {
@@ -215,6 +218,7 @@ public class GeneticAlgorithm {
 			//ga.population.initializePopulation(200, BB11013);
 		else if(choose.equals("3"))
 		{
+			Individual callfunc = new Individual(BB11008);
 			String[] firstalign = new String[BB11008.length];
 			for(int i = 0; i < BB11008.length-1; i++)
 	        {
@@ -229,6 +233,7 @@ public class GeneticAlgorithm {
 			//ga.population.initializePopulation(200, BB11008);
 		else if(choose.equals("4")) 
 		{
+			Individual callfunc = new Individual(data3);
 			String[] firstalign = new String[data3.length];
 			for(int i = 0; i < data3.length-1; i++)
 	        {
@@ -242,8 +247,22 @@ public class GeneticAlgorithm {
 		}
 		else
 		{
-			System.out.println("invalid input");
-			return;
+			String[] customSeq = FileReader.tfaReader("./src/" + choose + ".tfa");
+			for(int i = 0; i < customSeq.length; i++)
+			{
+				System.out.println("custom: " + customSeq[i]);
+			}
+			Individual callfunc = new Individual(customSeq);
+			String[] firstalign = new String[customSeq.length];
+			for(int i = 0; i < customSeq.length-1; i++)
+			{
+				firstalign[i]=callfunc.algin(customSeq[i],customSeq[(i+1)])[0];
+				if(i == customSeq.length-2)
+				{
+					firstalign[i+1]=callfunc.algin(customSeq[i],customSeq[(i+1)%customSeq.length])[1];
+				}
+			}
+			ga.population.initializePopulation(200, firstalign); //can switch back to orgin sequence
 		}
 
 		//Calculate fitness of each individual
@@ -304,14 +323,20 @@ public class GeneticAlgorithm {
 		{
 			result = new Individual(BB11013Result);
 		}
+		else if(choose.equals("3"))
+		{
+			result = new Individual(BB11008Result);
+		}
 		else if(choose.equals("4"))
 		{
 			result = new Individual(data3res);
 		}
 		else
 		{
-			result = new Individual(BB11008Result);
+			String[] customResult = FileReader.xmlReader("./src/" + choose + ".xml");
+			result = new Individual(customResult);
 		}
+
 
 		result.calcFitness();
 		System.out.println("The fitness for the comparing algorithm is: " + result.fitness);

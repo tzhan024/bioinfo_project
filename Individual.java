@@ -45,7 +45,7 @@ public class Individual {
      	for (int i = 0; i < x.length()+1; i++) {
      		mainMatrix[0][i]=tempPen;
      		if (i!=0) {
-     			tempYResult[0][i]=tempYResult[0][i-1]+"-";
+     			tempYResult[0][i]=tempYResult[0][i-1]+"_";
      			tempXResult[0][i]=tempXResult[0][i-1]+xArray[i-1];
     		}
      		tempPen+=gapPenalty;
@@ -54,7 +54,7 @@ public class Individual {
      	for (int i = 0; i < y.length()+1; i++) {
      		mainMatrix[i][0]=tempPen;
      		if (i!=0) {
-     			tempXResult[i][0]=tempXResult[i-1][0]+"-";
+     			tempXResult[i][0]=tempXResult[i-1][0]+"_";
      			tempYResult[i][0]=tempYResult[i-1][0]+yArray[i-1];
     		}
      		tempPen+=gapPenalty;
@@ -75,12 +75,12 @@ public class Individual {
     			}
     			else if (tempLeft > tempDiag && tempLeft >= tempUp) {
     				mainMatrix[i][j]=tempLeft;
-    				tempYResult[i][j]=tempYResult[i][j-1]+"-";
+    				tempYResult[i][j]=tempYResult[i][j-1]+"_";
     				tempXResult[i][j]=tempXResult[i][j-1]+xArray[j-1];
     			}
     			else if (tempUp > tempDiag && tempUp > tempLeft) {
     				mainMatrix[i][j]=tempUp;
-    				tempXResult[i][j]=tempXResult[i-1][j]+"-";
+    				tempXResult[i][j]=tempXResult[i-1][j]+"_";
     				tempYResult[i][j]=tempYResult[i-1][j]+yArray[i-1];
     			}
 
@@ -142,7 +142,7 @@ public class Individual {
             for(int j = 0; j < sequence.length; j++)
             {
             	//blosum62
-            	if( (sequence[j].charAt(i)!= '_' || sequence[j].charAt(i)!= '.')){
+            	if( (sequence[j].charAt(i)!= '_' || sequence[j].charAt(i)!= '.' || sequence[j].charAt(i)!= '-')){
             		fitness=fitness+getDistance(sequence[j].charAt(i), sequence[(j + 1) % sequence.length].charAt(i));
                 }
             	/*
