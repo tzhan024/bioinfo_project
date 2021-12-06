@@ -186,6 +186,7 @@ public class GeneticAlgorithm {
 		String choose = in.nextLine();
 		
 		
+
 //		Individual callfunc = new Individual(BB11001);
 		if(choose.equals("1") ) 
 		{
@@ -219,6 +220,7 @@ public class GeneticAlgorithm {
 		else if(choose.equals("3"))
 		{
 			Individual callfunc = new Individual(BB11008);
+
 			String[] firstalign = new String[BB11008.length];
 			for(int i = 0; i < BB11008.length-1; i++)
 	        {
@@ -234,6 +236,7 @@ public class GeneticAlgorithm {
 		else if(choose.equals("4")) 
 		{
 			Individual callfunc = new Individual(data3);
+
 			String[] firstalign = new String[data3.length];
 			for(int i = 0; i < data3.length-1; i++)
 	        {
