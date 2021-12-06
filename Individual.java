@@ -1,10 +1,73 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Random;
+import java.util.StringTokenizer;
 
 public class Individual {
 
     int fitness;
     String[] sequence;
     int sequenceLength;
+    
+    
+    
+    public static float[][] getmatrix() 
+    {
+    	File file = new File("matrices//BLOSUM62"); 
+     	
+     	String line;
+     	
+     	int SIZE = 24;
+     	
+     	char[] acids = new char[SIZE];
+     	
+     	char COMMENT_STARTER = '#';
+     	
+     	
+
+    	// Initialize the acids array to null values (ascii = 0)
+    	for (int i = 0; i < SIZE; i++) {
+    		acids[i] = 0;
+    	}
+
+    	float[][] scores = new float[SIZE][SIZE];
+    	
+        BufferedReader br;
+		try {
+			br = new BufferedReader(new FileReader(file));
+		
+	        StringTokenizer tokenizer;
+	        while ((line = br.readLine()) != null && line.trim().charAt(0) == COMMENT_STARTER);
+	    	tokenizer = new StringTokenizer ( line.trim( ) );
+	    	for (int j = 0; tokenizer.hasMoreTokens(); j++) {
+	    		acids[j] = tokenizer.nextToken().charAt(0);
+	    	}
+	    	int k = 0;
+	        while ((line = br.readLine()) != null) {
+	    		tokenizer = new StringTokenizer ( line.trim( ) );
+	    		char acid = tokenizer.nextToken().charAt(0);
+	    		for (int i = 0; i < SIZE; i++) {
+	    			//if (acids[i] != 0) {
+	    			scores[k][i] = Float.parseFloat(tokenizer.nextToken());
+	    			//}
+	    		}
+	    		k++;
+	        }	
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return scores;
+    }
+    
+    
+    private static float[][] matrix = getmatrix();
+    
+    
+    
+    
     private static 	int[][] Blosum62 = {
 			{ 4, -1, -2, -2,  0, -1, -1,  0, -2, -1, -1, -1, -1, -2, -1,  1,  0, -3, -2,  0},
 			{-1,  5,  0, -2, -3,  1,  0, -2,  0, -3, -2,  2, -1, -3, -2, -1, -1, -3, -2, -3},
@@ -117,12 +180,17 @@ public class Individual {
 	    	case 'W': return 17;
 	    	case 'Y': return 18;
 	    	case 'V': return 19;
+	    	case 'B': return 20;
+	    	case 'Z': return 21;
+	    	case 'X': return 22;
+	    	case '_': return 23;
 	    	default: return 0;
     	}
     }
     
     private static int getDistance(int i, int j) {
-    	return Blosum62[i][j];
+    	//return Blosum62[i][j];
+    	return (int)matrix[i][j];
     }
 
     public static int getDistance(char a1, char a2) {
