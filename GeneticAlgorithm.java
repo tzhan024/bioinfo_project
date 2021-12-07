@@ -1,3 +1,10 @@
+<<<<<<< Updated upstream
+=======
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+>>>>>>> Stashed changes
 import java.util.Random;
 import java.util.Scanner;
 
@@ -191,8 +198,27 @@ public class GeneticAlgorithm {
 			//ga.population.initializePopulation(200, BB11008);
 		else
 		{
+<<<<<<< Updated upstream
 			System.out.println("invalid input");
 			return;
+=======
+			String[] customSeq = FileReader.tfaReader( choose + ".tfa");
+			for(int i = 0; i < customSeq.length; i++)
+			{
+				System.out.println("custom: " + customSeq[i]);
+			}
+			Individual callfunc = new Individual(customSeq);
+			String[] firstalign = new String[customSeq.length];
+			for(int i = 0; i < customSeq.length-1; i++)
+			{
+				firstalign[i]=callfunc.algin(customSeq[i],customSeq[(i+1)])[0];
+				if(i == customSeq.length-2)
+				{
+					firstalign[i+1]=callfunc.algin(customSeq[i],customSeq[(i+1)%customSeq.length])[1];
+				}
+			}
+			ga.population.initializePopulation(200, firstalign); //can switch back to orgin sequence
+>>>>>>> Stashed changes
 		}
 
 		//Calculate fitness of each individual
@@ -214,7 +240,7 @@ public class GeneticAlgorithm {
 			ga.crossover();
 
 			//Do mutation under a random probability
-			if (Math.random() < 0.05)
+			if (Math.random() < 0.5)
 			{
 				ga.mutation();
 			}
@@ -241,6 +267,7 @@ public class GeneticAlgorithm {
 		{
 			System.out.println(bestIndividual.sequence[i]);
 		}
+		
 		int gaResult = ga.population.getFittest().fitness;
 		System.out.println("\nThe best fitness for genetic algorithm is: " + gaResult);
 
@@ -255,7 +282,12 @@ public class GeneticAlgorithm {
 		}
 		else
 		{
+<<<<<<< Updated upstream
 			result = new Individual(BB11008Result);
+=======
+			String[] customResult = FileReader.xmlReader(choose + ".xml");
+			result = new Individual(customResult);
+>>>>>>> Stashed changes
 		}
 
 		result.calcFitness();
@@ -310,22 +342,45 @@ public class GeneticAlgorithm {
 		Random rn = new Random();
 		//Select a random mutation point
 		int mutationPoint = rn.nextInt(population.individuals[0].sequenceLength);
+		
 		int individualIndex = rn.nextInt(population.individuals.length);
 		int proteinIndex = rn.nextInt(population.individuals[0].sequence.length);
-
+		
+		List<Integer> list=new ArrayList<Integer>();
+		for(int i = 0;i<population.individuals[individualIndex].sequence[proteinIndex].length();i++)
+		{
+			if(population.individuals[individualIndex].sequence[proteinIndex].charAt(i) == '_')
+			{
+				
+				list.add(i);
+			}
+		}
+		//System.out.println("list:"+list.size());
+		int deletePoint = rn.nextInt(list.size());
+		//System.out.println("list:"+list);
 		if(population.individuals[individualIndex].sequence[proteinIndex].charAt(mutationPoint) != '_')
 		{
 			population.individuals[individualIndex].sequence[proteinIndex] =
-					population.individuals[individualIndex].sequence[proteinIndex].substring(0, mutationPoint) +
-							"_" +
-							population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint + 1);
-		}
-		else
-		{
+					population.individuals[individualIndex].sequence[proteinIndex].substring(0, list.get(deletePoint)) +
+					population.individuals[individualIndex].sequence[proteinIndex].substring(list.get(deletePoint)+1);
+					
+					//population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint);
 			population.individuals[individualIndex].sequence[proteinIndex] =
 					population.individuals[individualIndex].sequence[proteinIndex].substring(0, mutationPoint) +
-							population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint + 1) +
-							"_";
+<<<<<<< Updated upstream
+							"_" +
+							population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint + 1);
+=======
+					"_"+
+					population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint);
+>>>>>>> Stashed changes
+		}
+		else
+		{/*
+			population.individuals[individualIndex].sequence[proteinIndex] =
+			population.individuals[individualIndex].sequence[proteinIndex].substring(0, mutationPoint) +
+			population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint + 1) +
+			"_";*/
 		}
 	}
 }
