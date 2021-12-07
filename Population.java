@@ -27,7 +27,7 @@ public class Population {
             for(int i=0; i < newSequence.length; i++){
                 String temp = newSequence[i];
 //                System.out.println(",,,  " + (longest));
-                for(int j = 0; j < longest + 5 - newSequence[i].length(); j++){
+                for(int j = 0; j < (int)(longest * 1.2) - newSequence[i].length(); j++){
 //                    System.out.println(longest + " " + newSequence[i].length());
                     int insertBlank = (int)Math.floor(Math.random() * temp.length());
                     temp = temp.substring(0, insertBlank) + "_" + temp.substring(insertBlank);
