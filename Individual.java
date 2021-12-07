@@ -1,73 +1,10 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Random;
-import java.util.StringTokenizer;
 
 public class Individual {
 
     int fitness;
     String[] sequence;
     int sequenceLength;
-
-    
-    
-    public static float[][] getmatrix() 
-    {
-    	File file = new File("matrices//BLOSUM62"); 
-     	
-     	String line;
-     	
-     	int SIZE = 24;
-     	
-     	char[] acids = new char[SIZE];
-     	
-     	char COMMENT_STARTER = '#';
-     	
-     	
-
-    	// Initialize the acids array to null values (ascii = 0)
-    	for (int i = 0; i < SIZE; i++) {
-    		acids[i] = 0;
-    	}
-
-    	float[][] scores = new float[SIZE][SIZE];
-    	
-        BufferedReader br;
-		try {
-			br = new BufferedReader(new FileReader(file));
-		
-	        StringTokenizer tokenizer;
-	        while ((line = br.readLine()) != null && line.trim().charAt(0) == COMMENT_STARTER);
-	    	tokenizer = new StringTokenizer ( line.trim( ) );
-	    	for (int j = 0; tokenizer.hasMoreTokens(); j++) {
-	    		acids[j] = tokenizer.nextToken().charAt(0);
-	    	}
-	    	int k = 0;
-	        while ((line = br.readLine()) != null) {
-	    		tokenizer = new StringTokenizer ( line.trim( ) );
-	    		char acid = tokenizer.nextToken().charAt(0);
-	    		for (int i = 0; i < SIZE; i++) {
-	    			//if (acids[i] != 0) {
-	    			scores[k][i] = Float.parseFloat(tokenizer.nextToken());
-	    			//}
-	    		}
-	    		k++;
-	        }	
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        return scores;
-    }
-    
-    
-    private static float[][] matrix = getmatrix();
-    
-    
-    
-    
     private static 	int[][] Blosum62 = {
 			{ 4, -1, -2, -2,  0, -1, -1,  0, -2, -1, -1, -1, -1, -2, -1,  1,  0, -3, -2,  0},
 			{-1,  5,  0, -2, -3,  1,  0, -2,  0, -3, -2,  2, -1, -3, -2, -1, -1, -3, -2, -3},
@@ -96,7 +33,6 @@ public class Individual {
      	int[][] mainMatrix = new int[y.length()+1][x.length()+1];
 
 
-
      	String[][] tempXResult = new String[y.length()+1][x.length()+1];
      	String[][] tempYResult = new String[y.length()+1][x.length()+1];
      	for (int i = 0; i < y.length()+1; i++) {
@@ -109,9 +45,7 @@ public class Individual {
      	for (int i = 0; i < x.length()+1; i++) {
      		mainMatrix[0][i]=tempPen;
      		if (i!=0) {
-
      			tempYResult[0][i]=tempYResult[0][i-1]+"_";
-
      			tempXResult[0][i]=tempXResult[0][i-1]+xArray[i-1];
     		}
      		tempPen+=gapPenalty;
@@ -120,9 +54,7 @@ public class Individual {
      	for (int i = 0; i < y.length()+1; i++) {
      		mainMatrix[i][0]=tempPen;
      		if (i!=0) {
-
      			tempXResult[i][0]=tempXResult[i-1][0]+"_";
-
      			tempYResult[i][0]=tempYResult[i-1][0]+yArray[i-1];
     		}
      		tempPen+=gapPenalty;
@@ -143,16 +75,12 @@ public class Individual {
     			}
     			else if (tempLeft > tempDiag && tempLeft >= tempUp) {
     				mainMatrix[i][j]=tempLeft;
-
     				tempYResult[i][j]=tempYResult[i][j-1]+"_";
-
     				tempXResult[i][j]=tempXResult[i][j-1]+xArray[j-1];
     			}
     			else if (tempUp > tempDiag && tempUp > tempLeft) {
     				mainMatrix[i][j]=tempUp;
-
     				tempXResult[i][j]=tempXResult[i-1][j]+"_";
-
     				tempYResult[i][j]=tempYResult[i-1][j]+yArray[i-1];
     			}
 
@@ -189,21 +117,12 @@ public class Individual {
 	    	case 'W': return 17;
 	    	case 'Y': return 18;
 	    	case 'V': return 19;
-
-	    	case 'B': return 20;
-	    	case 'Z': return 21;
-	    	case 'X': return 22;
-	    	case '_': return 23;
-r
 	    	default: return 0;
     	}
     }
     
     private static int getDistance(int i, int j) {
-
-    	//return Blosum62[i][j];
-    	return (int)matrix[i][j];
-
+    	return Blosum62[i][j];
     }
 
     public static int getDistance(char a1, char a2) {
@@ -223,10 +142,8 @@ r
             for(int j = 0; j < sequence.length; j++)
             {
             	//blosum62
-
             	if( (sequence[j].charAt(i)!= '_' || sequence[j].charAt(i)!= '.' || sequence[j].charAt(i)!= '-')){
             		fitness=fitness+getDistance(sequence[j].charAt(i), sequence[(j + 1) % sequence.length].charAt(i));
-
                 }
             	/*
             	//origin
