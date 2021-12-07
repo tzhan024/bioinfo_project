@@ -38,21 +38,25 @@ public class FileReader {
             for(int i = 0; i < sequences.size(); i++)
             {
 //                String data = "";
-                if(sequences.get(i).charAt(0) != '>')
+                if(sequences.get(i).length() > 0)
                 {
-                    data = data + sequences.get(i);
-                }
-                else
-                {
-                    if(data.length() > 0)
+                    if(sequences.get(i).charAt(0) != '>')
                     {
-                        result.add(data);
-                        data = "";
+                        data = data + sequences.get(i);
                     }
+                    else
+                    {
+                        if(data.length() > 0)
+                        {
+                            result.add(data);
+                            data = "";
+                        }
 
+                    }
+                    if(i + 1 >= sequences.size())
+                        result.add(data);
                 }
-                if(i + 1 >= sequences.size())
-                    result.add(data);
+
             }
 
 //            for(int i = 0; i < sequences.size(); i++)

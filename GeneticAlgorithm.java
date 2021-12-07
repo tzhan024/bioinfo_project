@@ -180,7 +180,7 @@ public class GeneticAlgorithm {
 		//Initialize population
 		System.out.println("Please select dataset, or enter a custom dataset to start eg. (BB11001): ");
 		System.out.println("1 -> BB11001");
-		System.out.println("2 -> BB11003");
+		System.out.println("2 -> BB11013");
 		System.out.println("3 -> BB11008");
 		Scanner in = new Scanner(System.in);
 		String choose = in.nextLine();
@@ -250,7 +250,7 @@ public class GeneticAlgorithm {
 		}
 		else
 		{
-			String[] customSeq = FileReader.tfaReader("./src/" + choose + ".tfa");
+			String[] customSeq = FileReader.tfaReader("./src/data/" + choose + ".tfa");
 			for(int i = 0; i < customSeq.length; i++)
 			{
 				System.out.println("custom: " + customSeq[i]);
@@ -336,7 +336,7 @@ public class GeneticAlgorithm {
 		}
 		else
 		{
-			String[] customResult = FileReader.xmlReader("./src/" + choose + ".xml");
+			String[] customResult = FileReader.xmlReader("./src/data/" + choose + ".xml");
 			result = new Individual(customResult);
 		}
 
