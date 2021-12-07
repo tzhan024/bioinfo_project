@@ -1,8 +1,5 @@
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -187,11 +184,11 @@ public class GeneticAlgorithm {
 		System.out.println("3 -> BB11008");
 		Scanner in = new Scanner(System.in);
 		String choose = in.nextLine();
-	
+		
+		
 
 //		Individual callfunc = new Individual(BB11001);
 		if(choose.equals("1") ) 
-
 		{
 			Individual callfunc = new Individual(BB11001);
 			String[] firstalign = new String[BB11001.length];
@@ -203,11 +200,9 @@ public class GeneticAlgorithm {
 					firstalign[i+1]=callfunc.algin(BB11001[i],BB11001[(i+1)%BB11001.length])[1];
 				}
 	        }
-
 			ga.population.initializePopulation(200, firstalign); //can switch back to orgin sequence
 		}	
 		else if(choose.equals("2")) 
-
 		{
 			Individual callfunc = new Individual(BB11013);
 			String[] firstalign = new String[BB11013.length];
@@ -219,9 +214,7 @@ public class GeneticAlgorithm {
 					firstalign[i+1]=callfunc.algin(BB11013[i],BB11013[(i+1)%BB11013.length])[1];
 				}
 	        }
-
 			ga.population.initializePopulation(200, firstalign); //can switch back to orgin sequence
-
 		}
 			//ga.population.initializePopulation(200, BB11013);
 		else if(choose.equals("3"))
@@ -234,9 +227,6 @@ public class GeneticAlgorithm {
 				firstalign[i]=callfunc.algin(BB11008[i],BB11008[(i+1)])[0];
 				if(i==BB11008.length-2)
 				{
-
-			String[] customSeq = FileReader.tfaReader( choose + ".tfa");
-
 					firstalign[i+1]=callfunc.algin(BB11008[i],BB11008[(i+1)%BB11008.length])[1];
 				}
 	        }
@@ -261,7 +251,6 @@ public class GeneticAlgorithm {
 		else
 		{
 			String[] customSeq = FileReader.tfaReader("./src/data/" + choose + ".tfa");
-
 			for(int i = 0; i < customSeq.length; i++)
 			{
 				System.out.println("custom: " + customSeq[i]);
@@ -277,7 +266,6 @@ public class GeneticAlgorithm {
 				}
 			}
 			ga.population.initializePopulation(200, firstalign); //can switch back to orgin sequence
-
 		}
 
 		//Calculate fitness of each individual
@@ -299,7 +287,7 @@ public class GeneticAlgorithm {
 			ga.crossover();
 
 			//Do mutation under a random probability
-			if (Math.random() < 0.5)
+			if (Math.random() < 0.05)
 			{
 				ga.mutation();
 			}
@@ -326,7 +314,6 @@ public class GeneticAlgorithm {
 		{
 			System.out.println(bestIndividual.sequence[i]);
 		}
-		
 		int gaResult = ga.population.getFittest().fitness;
 		System.out.println("\nThe best fitness for genetic algorithm is: " + gaResult);
 
@@ -341,10 +328,7 @@ public class GeneticAlgorithm {
 		}
 		else if(choose.equals("3"))
 		{
-
-			String[] customResult = FileReader.xmlReader(choose + ".xml");
-			result = new Individual(customResult);
-
+			result = new Individual(BB11008Result);
 		}
 		else if(choose.equals("4"))
 		{
@@ -407,43 +391,22 @@ public class GeneticAlgorithm {
 		Random rn = new Random();
 		//Select a random mutation point
 		int mutationPoint = rn.nextInt(population.individuals[0].sequenceLength);
-		
 		int individualIndex = rn.nextInt(population.individuals.length);
 		int proteinIndex = rn.nextInt(population.individuals[0].sequence.length);
-		
-		List<Integer> list=new ArrayList<Integer>();
-		for(int i = 0;i<population.individuals[individualIndex].sequence[proteinIndex].length();i++)
-		{
-			if(population.individuals[individualIndex].sequence[proteinIndex].charAt(i) == '_')
-			{
-				
-				list.add(i);
-			}
-		}
-		//System.out.println("list:"+list.size());
-		int deletePoint = rn.nextInt(list.size());
-		//System.out.println("list:"+list);
+
 		if(population.individuals[individualIndex].sequence[proteinIndex].charAt(mutationPoint) != '_')
 		{
 			population.individuals[individualIndex].sequence[proteinIndex] =
-					population.individuals[individualIndex].sequence[proteinIndex].substring(0, list.get(deletePoint)) +
-					population.individuals[individualIndex].sequence[proteinIndex].substring(list.get(deletePoint)+1);
-					
-					//population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint);
-			population.individuals[individualIndex].sequence[proteinIndex] =
 					population.individuals[individualIndex].sequence[proteinIndex].substring(0, mutationPoint) +
-
-							"_" +
-
+							population.individuals[individualIndex].sequence[(proteinIndex + 1) % population.individuals[individualIndex].sequence.length].substring(mutationPoint, mutationPoint + 1) +
 							population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint + 1);
-
 		}
 		else
-		{/*
+		{
 			population.individuals[individualIndex].sequence[proteinIndex] =
-			population.individuals[individualIndex].sequence[proteinIndex].substring(0, mutationPoint) +
-			population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint + 1) +
-			"_";*/
+					population.individuals[individualIndex].sequence[proteinIndex].substring(0, mutationPoint) +
+							population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint + 1) +
+							"_";
 		}
 	}
 }
