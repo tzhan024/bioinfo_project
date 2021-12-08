@@ -189,12 +189,11 @@ public class Individual {
 	    	case 'W': return 17;
 	    	case 'Y': return 18;
 	    	case 'V': return 19;
-
+	    	
 	    	case 'B': return 20;
 	    	case 'Z': return 21;
 	    	case 'X': return 22;
 	    	case '_': return 23;
-r
 	    	default: return 0;
     	}
     }
@@ -217,7 +216,8 @@ r
 
     //Calculate fitness
     public void calcFitness() {
-        fitness = 0;
+    	fitness = 0;
+        
         for(int i = 0; i < sequence[0].length(); i++)
         {
             for(int j = 0; j < sequence.length; j++)
@@ -225,12 +225,15 @@ r
             	//blosum62
 
             	if( (sequence[j].charAt(i)!= '_' || sequence[j].charAt(i)!= '.' || sequence[j].charAt(i)!= '-')){
+            		
             		fitness=fitness+getDistance(sequence[j].charAt(i), sequence[(j + 1) % sequence.length].charAt(i));
 
                 }
-            	/*
+            	
             	//origin
-            	if((sequence[j].charAt(i) == sequence[(j + 1) % sequence.length].charAt(i)) && (sequence[j].charAt(i)!= '_')){
+            	/*
+            	if((sequence[j].charAt(i) == sequence[(j + 1) % sequence.length].charAt(i)) && (sequence[j].charAt(i)!= '_'))
+            	{
                     fitness++;
                 }*/
             }

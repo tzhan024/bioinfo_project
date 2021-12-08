@@ -260,7 +260,7 @@ public class GeneticAlgorithm {
 		}
 		else
 		{
-			String[] customSeq = FileReader.tfaReader("./src/data/" + choose + ".tfa");
+			String[] customSeq = FileReader.tfaReader("data/" + choose + ".tfa");
 
 			for(int i = 0; i < customSeq.length; i++)
 			{
@@ -289,7 +289,7 @@ public class GeneticAlgorithm {
 
 		//While population gets an individual with maximum fitness
 		int count = 0;
-		while (count < 500) {
+		while (count < 5000) {
 			ga.generationCount++;
 
 			//Do selection
@@ -299,7 +299,7 @@ public class GeneticAlgorithm {
 			ga.crossover();
 
 			//Do mutation under a random probability
-			if (Math.random() < 0.5)
+			if (Math.random() < 0.6)
 			{
 				ga.mutation();
 			}
@@ -352,7 +352,7 @@ public class GeneticAlgorithm {
 		}
 		else
 		{
-			String[] customResult = FileReader.xmlReader("./src/data/" + choose + ".xml");
+			String[] customResult = FileReader.xmlReader("data/" + choose + ".xml");
 			result = new Individual(customResult);
 		}
 
@@ -423,27 +423,30 @@ public class GeneticAlgorithm {
 		//System.out.println("list:"+list.size());
 		int deletePoint = rn.nextInt(list.size());
 		//System.out.println("list:"+list);
+		
 		if(population.individuals[individualIndex].sequence[proteinIndex].charAt(mutationPoint) != '_')
 		{
 			population.individuals[individualIndex].sequence[proteinIndex] =
 					population.individuals[individualIndex].sequence[proteinIndex].substring(0, list.get(deletePoint)) +
 					population.individuals[individualIndex].sequence[proteinIndex].substring(list.get(deletePoint)+1);
+			//System.out.println("list:"+list);		
 					
-					//population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint);
 			population.individuals[individualIndex].sequence[proteinIndex] =
 					population.individuals[individualIndex].sequence[proteinIndex].substring(0, mutationPoint) +
 
-							"_" +
+					"_" +
 
-							population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint + 1);
+					population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint);
 
 		}
 		else
-		{/*
+		{
+			/*
 			population.individuals[individualIndex].sequence[proteinIndex] =
 			population.individuals[individualIndex].sequence[proteinIndex].substring(0, mutationPoint) +
 			population.individuals[individualIndex].sequence[proteinIndex].substring(mutationPoint + 1) +
-			"_";*/
+			"_";
+			*/
 		}
 	}
 }
