@@ -10,18 +10,31 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.*;
 
 public class FileReader {
-//    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
-//        String[] seq = tfaReader("./src/BB11001.tfa");
-//        for(int i = 0; i < seq.length; i++)
-//        {
-//            System.out.println("tfa: " + seq[i]);
-//        }
-//        String[] xml = xmlReader("./src/BB11001.xml");
-//        for(int i = 0; i < xml.length; i++)
-//        {
-//            System.out.println("xml: " + xml[i]);
-//        }
-//    }
+    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
+        Scanner in = new Scanner(System.in);
+        System.out.println("enter file: ");
+        String choose = in.nextLine();
+        String[] seq = tfaReader("./src/data/" + choose + ".tfa");
+        int tfaL = 0;
+        for(int i = 0; i < seq.length; i++)
+        {
+            System.out.println("tfa: " + seq[i]);
+            if(seq[i].length() > tfaL)
+                tfaL = seq[i].length();
+        }
+
+        String[] xml = xmlReader("./src/data/" + choose + ".xml");
+        int xmlL = 0;
+        for(int i = 0; i < xml.length; i++)
+        {
+            System.out.println("xml: " + xml[i]);
+            if(xml[i].length() > xmlL)
+                xmlL = xml[i].length();
+        }
+        System.out.println("tfa: " + tfaL);
+        System.out.println("xml: " + xmlL);
+        System.out.println("#seqs: " + seq.length);
+    }
     public static String[] tfaReader(String fileName) throws FileNotFoundException {
         ArrayList<String> sequences = new ArrayList<String>();
         ArrayList<String> result = new ArrayList<String>();
